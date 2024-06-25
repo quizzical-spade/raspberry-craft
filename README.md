@@ -1,5 +1,5 @@
 # raspberry-craft
-A guide and starting files for running a Minecraft server on a Raspberry Pi 5 using [Purpur](https://purpurmc.org/docs/purpur/), [`GNU Screen*`](https://www.gnu.org/software/screen/) and some scripts. At the end of this guide, you should have a Raspberry Pi that will launch a GNU Screen session on reboot. That Screen session will display the server output, current RAM/CPU usage and a blank terminal. You will then be able to remotely access the Screen session using SSH from any other computer on the network. 
+A guide and starting files for running a Minecraft server on a Raspberry Pi 5 using [Purpur](https://purpurmc.org/docs/purpur/), [`GNU Screen`](https://www.gnu.org/software/screen/)* and some scripts. At the end of this guide, you should have a Raspberry Pi that will launch a GNU Screen session on reboot. That Screen session will display the server output, current RAM/CPU usage and a blank terminal. You will then be able to remotely access the Screen session using SSH from any other computer on the network. 
 
 \* Technically it's just called Screen, but trying to Google for that is one of Dante's Circles.
 ## Required materials
@@ -24,7 +24,7 @@ A guide and starting files for running a Minecraft server on a Raspberry Pi 5 us
 
 Linux fits in a weird spot in the OS spectrum. On one hand you have Apple's macOS which aims to deliver every user a perfect experience. As a result, there's relatively limited customization. Windows is a bit more freedom of customization and control at the expense of reliability. I love my Windows box but there's a non-zero chance that something won't work the way it should.
 
-Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn the [command line](#command-line-crash-course).
+Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn the [command line](#command-line-crash-course). We use Linux because it's pretty light in terms of space and performance; it can run on less powerful hardware, which makes it perfect for Raspberry Pis (and older computers).
 ## Configuring the Pi
 Starting this step I assume that you have a Pi and all its parts, including a microSD running Raspbian (Raspberry Pi OS). Put the SD card into the Pi, connect it to a monitor, keyboard, and mouse, and power it up! You should be greeted by the splash screen and the setup. Go through the setup, but maybe save customizing everything to your liking till after the next section.
 
@@ -52,9 +52,17 @@ When you type commands in Linux, you type them after the command prompt. This is
 
 [^1]:In Linux, the things we know as folders are referred to as directories. Much like a building directory, a folder is really just a list of files.
 ### Command line quick reference
+`.` refers to the current directory. `..` is the directory above the current.
 |Command | Flags | Targets| Usage|
 |---|---|---|---|
-| cp | |`[path/to/source] [path/to/destination]` | Copy file `source` to file `destination` |
+| `cp` ||`[path/to/source] [path/to/destination]` | Copy file `source` to file `destination` |
+| `mv` ||`[path/to/source] [path/to/destination]` | Move file `source` to file `destination`.<br>This can also be used to "rename" files. |
+| `ls` |`-a`[ll]<br>`-l`[ong]|| | Lists files in the current directory. |
+| `cd` ||`[path/to/destination]`|Change directory to `destination`.|
+|`touch`||`[path/to/destination]`| Create file `destination`|
+|`mkdir`||`[path/to/destination]`|Create directory `destination`|
+|`cat`||`[path/to/destination]`|Print the **entire** contents of `destination` to the console.<br>Will con`cat`enate the file contents to the standard output, (which is the console).|
+
 ## Downloading .jar files and initizalizing the server
 Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I SCPed it from my workstation to the Pi, but you can do it however you'd like, WGET or a flashdrive work fine. Make a directory to keep all the Minecraft stuff in. I called mine `mc`.
 ## Tuning the server

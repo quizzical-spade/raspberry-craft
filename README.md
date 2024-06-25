@@ -16,6 +16,15 @@ A guide and starting files for running a Minecraft server on a Raspberry Pi 5 us
   * Linux command line
   * Vim
 * A main computer for remotely accessing the Pi (completely optional, but you will not be able to play Minecraft on the Pi)
+### So what's the deal with Linux?
+> [!NOTE]
+> This section is intended for people who haven't really used Linux or don't really get what it's about. If that's not you, skip this!
+> 
+> It's probably the most opinionated part of this guide, so please put down your pitchforks.
+
+Linux fits in a weird spot in the OS spectrum. On one hand you have Apple's macOS which aims to deliver every user a perfect experience. As a result, there's relatively limited customization. Windows is a bit more freedom of customization and control at the expense of reliability. I love my Windows box but there's a non-zero chance that something won't work the way it should.
+
+Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn the [command line](#command-line-crash-course).
 ## Configuring the Pi
 Starting this step I assume that you have a Pi and all its parts, including a microSD running Raspbian (Raspberry Pi OS). Put the SD card into the Pi, connect it to a monitor, keyboard, and mouse, and power it up! You should be greeted by the splash screen and the setup. Go through the setup, but maybe save customizing everything to your liking till after the next section.
 
@@ -27,12 +36,6 @@ Get the Pi on the Wifi or Ethernet, it'll need to access the internet.
 Running a Graphical User Interface (GUI)--the desktop and visual programs as opposed to pure command line--isn't very taxing for a Pi, but the more processing power we can free up the better. If you choose to skip it, edit files in whatever text editor you like. My Pi shipped with 3 separate ones of varying degrees of complexity.
 
 If you choose to disable the GUI, select "boot into command line", rather than "boot into GUI". You can always re-enable this if you end up using the Pi for something else by running `sudo raspi-config`.
-### So what's the deal with Linux?
-> [!NOTE]
-> This section is intended for people who haven't really used Linux or don't really get what it's about. If that's not you, skip this!
-
-I was and am a dedicated Windows user. That can make switching to Linux pretty tricky!
-
 ## Command Line crash course
 You're gonna have to know some things about the command line in order to stay sane. 
 ## Downloading .jar files and initizalizing the server

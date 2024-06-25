@@ -35,9 +35,26 @@ Get the Pi on the Wifi or Ethernet, it'll need to access the internet.
 
 Running a Graphical User Interface (GUI)--the desktop and visual programs as opposed to pure command line--isn't very taxing for a Pi, but the more processing power we can free up the better. If you choose to skip it, edit files in whatever text editor you like. My Pi shipped with 3 separate ones of varying degrees of complexity.
 
-If you choose to disable the GUI, select "boot into command line", rather than "boot into GUI". You can always re-enable this if you end up using the Pi for something else by running `sudo raspi-config`.
+If you choose to disable the GUI, select "boot into command line", rather than "boot into GUI". This is known as booting "headless". You can always re-enable this if you end up using the Pi for something else by running `sudo raspi-config`.
 ## Command Line crash course
 You're gonna have to know some things about the command line in order to stay sane. 
+
+If you're setting up a server, you've probably messed around with Minecraft commands, such as `/tp`. When you open the chat and type, you're interacting with the server on a command line, not graphically. In this case, non-graphical means that there's no cursor or windows to navigate. 
+
+When running headless Linux, you interact with every* system by typing commands in. The `/tp` command can take "arguments", or targets. `/tp Alice Bob` will teleport target Alice to target Bob. Linux commands sometimes also have arguments. And, like in Minecraft, if you type in a target that doesn't exist, the command will throw an error.
+
+In Linux, commands are frequently shortened to representative letters; just like `/tp` for `t`ele`p`ort, Linux has `cp` for `c`o`p`y. Notice that Linux commands do not have a `/` before them. That's because in Minecraft, you can either send text in chat or type commands, so you need a way to distinguish between the two. In Linux, you just type commands.
+
+Let's say you're in a directory[^1] with one text file: `Alice.txt`. If you want to make a copy of `Alice.txt` and store it in `Alice_backup.txt`, you would type `cp Alice.txt Alice_backup.txt`.
+
+
+When you type commands in Linux, you type them after the command prompt. This is formatted as such: `<user_name>@<machine-name>~:`. Mine is `quiz@raspberry-pi~:`. If you were to type `cp EULA.txt EULA-copy.txt` and hit Enter
+
+[^1]:In Linux, the things we know as folders are referred to as directories. Much like a building directory, a folder is really just a list of files.
+### Command line quick reference
+|Command | Flags | Targets| Usage|
+|---|---|---|---|
+| cp | |`[path/to/source] [path/to/destination]` | Copy file `source` to file `destination` |
 ## Downloading .jar files and initizalizing the server
 Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I SCPed it from my workstation to the Pi, but you can do it however you'd like, WGET or a flashdrive work fine. Make a directory to keep all the Minecraft stuff in. I called mine `mc`.
 ## Tuning the server

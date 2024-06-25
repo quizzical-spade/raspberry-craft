@@ -24,9 +24,13 @@ A guide and starting files for running a Minecraft server on a Raspberry Pi 5 us
 
 Linux fits in a weird spot in the OS spectrum. On one hand you have Apple's macOS which aims to deliver every user a perfect experience. As a result, there's relatively limited customization. Windows is a bit more freedom of customization and control at the expense of reliability. I love my Windows box but there's a non-zero chance that something won't work the way it should.
 
-Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn the [command line](#command-line-crash-course). We use Linux because it's pretty light in terms of space and performance; it can run on less powerful hardware, which makes it perfect for Raspberry Pis (and older computers).
+Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn no just the [command line](#command-line-crash-course) but also how operating systems and processes work in general. It's worth it, I promise. You're learning not only a new skill but a whole swath of new terms and ways of thinking about things. It will come, and this is a very, very verbose guide, so you should have a good basis.
+
+For this project, we're use Linux because it's free and pretty light in terms of space and performance; it can run on less powerful hardware, which makes it perfect for Raspberry Pis (and older computers).
 ## Configuring the Pi
-Starting this step I assume that you have a Pi and all its parts, including a microSD running Raspbian (Raspberry Pi OS). Put the SD card into the Pi, connect it to a monitor, keyboard, and mouse, and power it up! You should be greeted by the splash screen and the setup. Go through the setup, but maybe save customizing everything to your liking till after the next section.
+Starting this step I assume that you have a Pi and all its parts, including a microSD running Raspbian (Raspberry Pi OS). 
+
+Make sure the Pi is powered off. Put the SD card into the Pi, connect it to a monitor, keyboard, and mouse, and power it up! You should be greeted by the splash screen and the setup. Go through the setup, but maybe save customizing everything to your liking till after the next section.
 
 Get the Pi on the Wifi or Ethernet, it'll need to access the internet.
 ### Disabling the GUI (recommended)

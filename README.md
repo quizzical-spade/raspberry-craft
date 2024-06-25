@@ -46,7 +46,7 @@ When running headless Linux, you interact with every* system by typing commands 
 In Linux, commands are frequently shortened to representative letters; just like `/tp` for `t`ele`p`ort, Linux has `cp` for `c`o`p`y. Notice that Linux commands do not have a `/` before them. That's because in Minecraft, you can either send text in chat or type commands, so you need a way to distinguish between the two. In Linux, you just type commands.
 
 Let's say you're in a directory[^1] with one text file: `Alice.txt`. If you want to make a copy of `Alice.txt` and store it in `Alice_backup.txt`, you would type `cp Alice.txt Alice_backup.txt`.
-
+[^1]:In Linux, the things we know as folders are referred to as directories. Much like a building directory, a folder is really just a list of files.
 ### Worked example
 Now that you've seen how it flows, let's do a worked example. We're going to make a directory titled `minecraft_servers`, navigate into it, create `DEFAULT_README.txt` file and add some text to it. Then, we'll create a `purpur_defaults` directory, copy the `DEFAULT_README.txt` into it and rename it `README_PURPUR_DEFAULTS.txt` before editing it again. I'll go line by line and explain, then show the entire block at the end.
 
@@ -141,9 +141,14 @@ README_PURPUR_DEFAULTS.txt
 ```
 List the contents of the `purpur_defaults/` directory. You can see the second README.
 
+
+&nbsp;
+
+With that, you've done it! You've survived your first journey into the Linux command line. Take a break and have some water, it can only get easier.
 </details>
 <details>
- <Summary>Full command block</Summary>
+<Summary>Full command block</Summary>
+ 
 ```
 quiz@raspberry-pi:~ $ mkdir minecraft_servers
 quiz@raspberry-pi:~ $ cd minecraft_servers/
@@ -166,11 +171,11 @@ quiz@raspberry-pi:~ $ cd purpur_defaults/
 quiz@raspberry-pi:~ $ ls purpur_defaults/
 README_PURPUR_DEFAULTS.txt
 ```
- </details>
-<!---When you type commands in Linux, you type them after the command prompt. This is formatted roughly as such: `(user_name)@(machine-name)~:`. Mine is `quiz@raspberry-pi~:`. If you were to type `cp EULA.txt EULA-copy.txt` and hit Enter--->
 
-[^1]:In Linux, the things we know as folders are referred to as directories. Much like a building directory, a folder is really just a list of files.
+</details>
+
 ### Command line quick reference
+
 `.` refers to the current directory. `..` is the directory above the current.
 
 `<Tab>` will auto complete.
@@ -188,9 +193,48 @@ All flags are optional.
 |`cat`||`FILE`|Print the **entire** contents of `destination` to the console.<br>Will con`cat`enate the file contents to the standard output, (which is the console).|
 |`less`||`FILE`|Display a paginated version of `destination`'s contents.<br>\`<Space>` will jump a page and \`<q>` will exit.<br>\<Arrow keys> will move line by line.|
 
-## Downloading .jar files and initizalizing the server
-Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I SCPed it from my workstation to the Pi, but you can do it however you'd like, WGET or a flashdrive work fine. Make a directory to keep all the Minecraft stuff in. I called mine `mc`.
+## Downloading .jar files and initizalizing the server on your workstation
+> [!NOTE] This step assumes you have access to any other computer that isn't the Pi. If that isn't the case, follow these instructions on your Pi.
+> I completed them on my Windows workstation.
+
+### First run
+Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I ran the latest supported version, which is 1.20.6. Make a folder called `Minecraft_server` and put the .jar in it. Open the Terminal app or just Command Prompt. `cd` into the `Minecraft_server` directory. `touch start.bat` to create a BATCH (Windows scripting) file. Edit the .bat in notepad and put the following code inside it. **Make sure you change the .jar name.**
+
+```
+java -Xms4096M -Xmx4096M -jar SERVER_NAME.jar --nogui
+```
+
+This uses `java` to open `SERVER_NAME.jar` with `4096M` of memory allocated (4GB) and with `no-gui`. The first time this .bat is run, it will generate a world and begin running it locally. Afterwards, it'll just start the server without re-generating anything.
+
+Start the server by typing `start.ba<Tab>` and hitting enter. The server will spool up in about 30 seconds.
+
+### Finding a good starting area
+Launch Minecraft with the same version and Direct Connect to `localhost`. Run around and see if you like the spawn area. If you don't:
+1. Stop the server by typing `/stop` in Minecraft or `stop` into the server console.
+2. Delete the `world` folder that was created
+3. Re-run the .bat and reconnect
+
+### Pre-generating the world with Chunky
+Once you've found a starting area you like, complete the following steps (copied verbatim from [that server optimization guide from earlier](https://github.com/YouHaveTrouble/minecraft-optimization?tab=readme-ov-file#map-pregen)):
+
+------------
+Map pregeneration, thanks to various optimizations to chunk generation added over the years is now only useful on servers with terrible, single threaded, or limited CPUs. Though, pregeneration is commonly used to generate chunks for world-map plugins such as Pl3xMap or Dynmap.
+
+If you still want to pregen the world, you can use a plugin such as [Chunky](https://github.com/pop4959/Chunky) to do it. Make sure to set up a world border so your players don't generate new chunks! Note that pregenning can sometimes take hours depending on the radius you set in the pregen plugin. Keep in mind that with Paper and above your tps will not be affected by chunk loading, but the speed of loading chunks can significantly slow down when your server's cpu is overloaded.
+
+It's key to remember that the overworld, nether and the end have separate world borders that need to be set up for each world. The nether dimension is 8x smaller than the overworld (if not modified with a datapack), so if you set the size wrong your players might end up outside of the world border!
+
+**Make sure to set up a vanilla world border (`/worldborder set [diameter]`), as it limits certain functionalities such as lookup range for treasure maps that can cause lag spikes.**
+
+------------
+
+I set up a 1000 block radius with Chunky. That's a good enough size that you can sprint all out for a bit before hitting the border.
+
+### Getting your completed files onto the Pi
+Once Chunky is complete, shut down the server.
+I SCPed it from my workstation to the Pi, but you can do it however you'd like, WGET or a flashdrive work fine. Make a directory to keep all the Minecraft stuff in. I called mine `mc`.
 ## Tuning the server
+What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization).
 ## Port fowarding the router
 ## Optional extras
 ### Simple startup script

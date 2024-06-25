@@ -50,7 +50,11 @@ Let's say you're in a directory[^1] with one text file: `Alice.txt`. If you want
 ### Worked example
 Now that you've seen how it flows, let's do a worked example. We're going to make a directory titled `minecraft_servers`, navigate into it, create `DEFAULT_README.txt` file and add some text to it. Then, we'll create a `purpur_defaults` directory, copy the `DEFAULT_README.txt` into it and rename it `README_PURPUR_DEFAULTS.txt` before editing it again. I'll go line by line and explain, then show the entire block at the end.
 
-```
+Note that my command prompt renders here as `quiz@raspberry-pi:~ $ `. The commands are the text after the `$`. Yours may include the current path, something like: `(user)@(machine):~/your/current/path$`. Neither will impact functionality.
+<details>
+ <Summary>Line by line example</Summary>
+
+ ```
 quiz@raspberry-pi:~ $ mkdir minecraft_servers
 ```
 Make a directory in the current directory and title it `minecraft_servers`
@@ -81,9 +85,9 @@ quiz@raspberry-pi:~ $ vim DEFAULT_README.txt
 ```
 This launches into the Vim editor, which has a learning curve the size and shape of a brick wall. [My attempt at a tutorial](#vim-crash-course). Your favourite online resource probably has a tutorial.
 
-For now, just hit `<i>` and then type this: `This is a [version] server running: [plugins].` Then hit these keys: `<Ctrl+C><:><w><q><Enter>`. 
+For now, just hit `<i>` and then type this: `This is a [version] server running: [plugins].` Then hit <Ctrl+C>` before typing: `:wq`. Hit `<Enter>` to save and quit.
 
-This enters `i`nsert mode which lets you type text as normal. You then exit insert mode with `<Ctrl+C>`. Now inn `Normal` mode, you send Vim a command with `:`. The command is `w`rite and `q`uit, using `<Enter>` to send.
+This enters `i`nsert mode which lets you type text as normal. You then exit insert mode with `<Ctrl+C>`. Now in `Normal` mode, you send Vim a command with `:`. The command is `w`rite and `q`uit, using `<Enter>` to send.
 
 ```
 quiz@raspberry-pi:~ $ mkdir purpur_defaults
@@ -93,7 +97,53 @@ Make a directory in the current directory and title it `purpur_defaults`
 ```
 quiz@raspberry-pi:~ $ cp DEFAULT_README.txt purpur_defaults/
 ```
-Copy the `DEFAULT_README.txt` from this directory and place it in `purpur_defaults`
+Copy the `DEFAULT_README.txt` from this directory and place it in `purpur_defaults`. When the destination filename is unspecified, it will use the source filename. 
+
+You could also replace the second argument `purpur_defaults/` with `purpur_defaults/README_PURPUR_DEFAULTS.txt` which would copy `DEFAULT_README.txt` and store it in `purpur_defaults/` with the name `README_PURPUR_DEFAULTS.txt`. Doing so would remove the need for the `mv` command that happens next.
+
+```
+quiz@raspberry-pi:~ $ cd purpur_defaults/
+```
+Change to the `purpur_defaults` directory. This is technically optional; all commands can operate on files that are in other directories, it's just more typing. 
+
+Eg: `cp minecraft_servers/DEFAULT_README.txt minecraft_servers/purpur_defaults/` vs the cp command above.
+
+```
+quiz@raspberry-pi:~ $ mv DEFAULT_README.txt README_PURPUR_DEFAULTS.txt
+```
+Move `DEFAULT_README.txt` to the file `README_PURPUR_DEFAULTS.txt`, effectively renaming it.
+
+```
+quiz@raspberry-pi:~ $ vim README_PURPUR_DEFAULTS.txt
+```
+Edit the new README with Vim. Press `<i>` to enter `i`nsert mode. Edit the text to say: `This is a Purpur server running full defaults. Do not edit this directory!`. Exit `i`nsert mode (`<Ctrl+C>`) then save and exit (`:wq<Enter>`).
+
+```
+quiz@raspberry-pi:~ $ cat README_PURPUR_DEFAULTS.txt
+This is a Purpur server running full defaults. Do not edit this directory!
+```
+This prints the contents of `README_PURPUR_DEFAULTS.txt` to the console. Just a verification that our changes saved.
+
+```
+quiz@raspberry-pi:~ $ cd ..
+```
+Change directory up to the parent folder, which is `minecraft_servers`.
+
+```
+quiz@raspberry-pi:~ $ ls
+DEFAULT_README.txt  purpur_defaults
+```
+List the contents of the current directory. You can see the first README we created, as well as the `purpur_defaults` directory. They should be colour-coded, for me blue is a directory and no color is a file.
+
+```
+quiz@raspberry-pi:~ $ ls purpur_defaults/
+README_PURPUR_DEFAULTS.txt
+```
+List the contents of the `purpur_defaults/` directory. You can see the second README.
+
+</details>
+<details>
+ <Summary>Full command block</Summary>
 ```
 quiz@raspberry-pi:~ $ mkdir minecraft_servers
 quiz@raspberry-pi:~ $ cd minecraft_servers/
@@ -107,22 +157,30 @@ quiz@raspberry-pi:~ $ cp DEFAULT_README.txt purpur_defaults/
 quiz@raspberry-pi:~ $ cd purpur_defaults/
 quiz@raspberry-pi:~ $ mv DEFAULT_README.txt README_PURPUR_DEFAULTS.txt
 quiz@raspberry-pi:~ $ vim README_PURPUR_DEFAULTS.txt
+quiz@raspberry-pi:~ $ cat README_PURPUR_DEFAULTS.txt
+This is a Purpur server running full defaults. Do not edit this directory!
 quiz@raspberry-pi:~ $ cd ..
 quiz@raspberry-pi:~ $ ls
 DEFAULT_README.txt  purpur_defaults
 quiz@raspberry-pi:~ $ cd purpur_defaults/
-quiz@raspberry-pi:~ $ ls
+quiz@raspberry-pi:~ $ ls purpur_defaults/
 README_PURPUR_DEFAULTS.txt
 ```
-<When you type commands in Linux, you type them after the command prompt. This is formatted roughly as such: `(user_name)@(machine-name)~:`. Mine is `quiz@raspberry-pi~:`. If you were to type `cp EULA.txt EULA-copy.txt` and hit Enter>
+ </details>
+<!---When you type commands in Linux, you type them after the command prompt. This is formatted roughly as such: `(user_name)@(machine-name)~:`. Mine is `quiz@raspberry-pi~:`. If you were to type `cp EULA.txt EULA-copy.txt` and hit Enter--->
 
 [^1]:In Linux, the things we know as folders are referred to as directories. Much like a building directory, a folder is really just a list of files.
 ### Command line quick reference
 `.` refers to the current directory. `..` is the directory above the current.
+
+`<Tab>` will auto complete.
+
+All flags are optional.
+
 |Command | Flags | Targets| Usage|
 |---|---|---|---|
 | `cp` |`-r`ecursive|`SOURCE` `DESTINATION` | Copy file `source` to file `destination`. `-r` will copy directories.|
-| `mv` ||`SOURCE` `DESTINATION`| Move file `source` to file `destination`.<br>This can also be used to "rename" files. |
+| `mv` |`-n`o clobber|`SOURCE` `DESTINATION`| Move file `source` to file `destination`.<br>This can also be used to "rename" files.<br>`-n` will prevent you from overwriting an existing file.|
 | `ls` |`-a`ll<br>`-l`ong|`[FILE]`| | Lists files in the current directory. |
 | `cd` ||`DESTINATION`|Change directory to `destination`.|
 |`touch`||`DESTINATION`| Create file `destination`|

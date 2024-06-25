@@ -19,7 +19,6 @@ A guide and starting files for running a Minecraft server on a Raspberry Pi 5 us
 ### So what's the deal with Linux?
 > [!NOTE]
 > This section is intended for people who haven't really used Linux or don't really get what it's about. If that's not you, skip this!
-> 
 > It's probably the most opinionated part of this guide, so please put down your pitchforks.
 
 Linux fits in a weird spot in the OS spectrum. On one hand you have Apple's macOS which aims to deliver every user a perfect experience. As a result, there's relatively limited customization. Windows is a bit more freedom of customization and control at the expense of reliability. I love my Windows box but there's a non-zero chance that something won't work the way it should.
@@ -179,6 +178,7 @@ README_PURPUR_DEFAULTS.txt
 </details>
 
 ### Command line quick reference
+`~` is a substitute for `/home/(user_name)`, such as `home/quiz`
 
 `.` refers to the current directory. `..` is the directory above the current.
 
@@ -195,10 +195,12 @@ All flags are optional.
 |`touch`||`DESTINATION`| Create file `destination`|
 |`mkdir`||`DIRECTORY`|Create directory `destination`|
 |`cat`||`FILE`|Print the **entire** contents of `destination` to the console.<br>Will con`cat`enate the file contents to the standard output, (which is the console).|
-|`less`||`FILE`|Display a paginated version of `destination`'s contents.<br>\`<Space>` will jump a page and \`<q>` will exit.<br>\<Arrow keys> will move line by line.|
-
+|`less`||`FILE`|Display a paginated version of `destination`'s contents.<br>`<Space>` will jump a page and `<q>` will exit.<br>`<Arrow keys>` will move line by line.|
+|`scp`<br>(local)|`-r`ecursive|`LOCAL_SOURCE` `[DEST_USR@]DEST_IP`:`REMOTE_DEST` |Securely copy file `LOCAL_SOURCE` to `REMOTE_DEST` which lives on `DEST_IP`.<br>`DEST_USR` is optional and will password prompt.|
+|`scp`<br>(remote)|`-r`ecursive|`[SOURCE_USR@]SOURCE_IP`:`REMOTE_SOURCE` `LOCAL_DEST` |Securely copy file `REMOTE_SOURCE` which lives on `SOURCE_IP` to `LOCAL_DEST`|
 ## Downloading .jar files and initizalizing the server on your workstation
-> [!NOTE] This step assumes you have access to any other computer that isn't the Pi. If that isn't the case, follow these instructions on your Pi.
+> [!NOTE]
+> This step assumes you have access to any other computer that isn't the Pi. If that isn't the case, follow these instructions on your Pi.
 > I completed them on my Windows workstation.
 
 ### First run
@@ -219,7 +221,7 @@ Launch Minecraft with the same version and Direct Connect to `localhost`. Run ar
 3. Re-run the .bat and reconnect
 
 ### Pre-generating the world with Chunky
-Once you've found a starting area you like, complete the following steps (copied verbatim from [that server optimization guide from earlier](https://github.com/YouHaveTrouble/minecraft-optimization?tab=readme-ov-file#map-pregen)):
+Once you've found a starting area you like, complete the following steps (copied verbatim from a [server optimization guide](https://github.com/YouHaveTrouble/minecraft-optimization?tab=readme-ov-file#map-pregen))<sup>more on that later</sup>:
 
 ------------
 Map pregeneration, thanks to various optimizations to chunk generation added over the years is now only useful on servers with terrible, single threaded, or limited CPUs. Though, pregeneration is commonly used to generate chunks for world-map plugins such as Pl3xMap or Dynmap.
@@ -235,10 +237,52 @@ It's key to remember that the overworld, nether and the end have separate world 
 I set up a 1000 block radius with Chunky. That's a good enough size that you can sprint all out for a bit before hitting the border.
 
 ### Getting your completed files onto the Pi
-Once Chunky is complete, shut down the server.
-I SCPed it from my workstation to the Pi, but you can do it however you'd like, WGET or a flashdrive work fine. Make a directory to keep all the Minecraft stuff in. I called mine `mc`.
+> [!NOTE]
+> If you completed the Chunky steps on the Pi already, skip this step.
+
+Once Chunky is complete, shut down the server. We're going to use the terminal to securely copy (`scp`) the files from your workstation to your Pi. This starts to get into networking a little bit, so it may take some tweaking. When computers communicate, they do so using IP (Internet Protocol) addresses. This is like a house address for a computer. Due to firewalls and routers, computers on your Wifi are going to be on a different "network" than those connected directly via Ethernet.
+
+Due to this fact, it's far easier to `scp` from a wired connection to a wireless one. If both are wireless or both are Ethernet, direction doesn't matter.
+
+My workstation is wired and my Pi is wireless, so I'll explain that setup first.
+#### Wired workstation -> Wireless Pi
+<details>
+To find the IP of your Pi, you'll need to type `ip a` into the console.
+
+```
+quiz@raspberry-pi:~$ ip a
+
+TBA
+```
+Explanation here
+
+On your Windows PC, launch Terminal/Command Prompt. Navigate to the **parent directory** of the `Minecraft_Server` folder that you ran Chunky in. So if the path is `C:/Users/Quiz/Documents/Minecraft_Server`, navigate to `Documents`. The command I would run is `scp -r Minecraft_Server quiz@(PI_IP):~/mc/pre_gen_server`. This would prompt you for the Pi's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `/home/quiz/mc/pre_gen_server` (which `scp` will create if it is not present) on the computer listed with `PI_IP`. It may take a minute or two, depending on connection speed and file size.
+
+The general form is `scp -r (local_destination_to_transfer) (pi_username)@(PI_IP):~/path/to/server/directory`
+
+Confirm that the transfer worked by entering the Pi's console and running `ls ~/mc`. You should see the server directory listed there.
+</details>
+
+#### Wired Pi <- Wireless workstation
+<details>
+On your Windows PC, launch Terminal/Command Prompt. Type in `ipconfig` and you should get a long output that contains a section like this:
+
+```
+Wireless LAN adapter Wi-Fi:
+
+   Connection-specific DNS Suffix  . : [redacted for privacy]
+   Link-local IPv6 Address . . . . . : [redacted for privacy]
+   IPv4 Address. . . . . . . . . . . : 10.140.248.114
+   Subnet Mask . . . . . . . . . . . : [redacted for privacy]
+   Default Gateway . . . . . . . . . : [redacted for privacy]
+```
+Write down the IPv4 address and label it `WORKSTATION_IP`.
+
+On your Pi, `cd` to the location you want the new directory stored in. For me, that would be `cd ~/mc`. Remember, we're copying a directory, not a file, so we don't need to create the destination directory ourselves. Next, run `scp`. The command I would run is `scp -r Quiz@WORKSTATION_IP:C:\Users\Quiz\Documents\Minecraft_Server .`. This wuold prompt you for the PC's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `.` (current directory) off of the computer listed with `WORKSTATION_IP`. It may take a minute or two, depending on connection speed and file size.
+</details>
+
 ## Tuning the server
-What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization).
+What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization)<sup>Later is now!</sup>. I followed that guide exactly except for the DAB settings, which I left untouched.
 ## Port fowarding the router
 ## Optional extras
 ### Simple startup script

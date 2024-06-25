@@ -1,9 +1,11 @@
 # raspberry-craft
 A guide and starting files for running a Minecraft server on a Raspberry Pi 5 using [Purpur](https://purpurmc.org/docs/purpur/), [`GNU Screen`](https://www.gnu.org/software/screen/)* and some scripts. At the end of this guide, you should have a Raspberry Pi that will launch a GNU Screen session on reboot. That Screen session will display the server output, current RAM/CPU usage and a blank terminal. You will then be able to remotely access the Screen session using SSH from any other computer on the network. 
 
+Throughout this guide, all command line commands will be formatted like `this`. All keystrokes will be formatted like `<this>`. Anything optional will surrounded in [ ], like `[so]`. Anything that should be replaced with your own values will be shown like `<this>`.
+
 \* Technically it's just called Screen, but trying to Google for that is one of Dante's Circles.
 ## Required materials
-* Raspberry Pi 5 (other models may work, but RAM may be a limiting factor). I purchased the [Complete Kit from Vilros for $150](https://vilros.com/products/raspberry-pi-5?variant=40082990399582).
+* Raspberry Pi 5* (other models may work, but RAM may be a limiting factor). I purchased the [Complete Kit from Vilros for $150](https://vilros.com/products/raspberry-pi-5?variant=40082990399582).
   * Additional hardware for the Pim including:
     * Power supply
     * Case with active cooling
@@ -16,7 +18,9 @@ A guide and starting files for running a Minecraft server on a Raspberry Pi 5 us
   * Linux command line
   * Vim
 * A main computer for remotely accessing the Pi (completely optional, but you will not be able to play Minecraft on the Pi)
-### So what's the deal with Linux?
+
+\* Most of this guide can be completed on any computer running Debian. The server optimization and tuning is what is specifically Pi oriented.
+### So what's the deal with Linux, why are we running a weird fork of it instead of Windows?
 > [!NOTE]
 > This section is intended for people who haven't really used Linux or don't really get what it's about. If that's not you, skip this!
 > It's probably the most opinionated part of this guide, so please put down your pitchforks.
@@ -200,11 +204,11 @@ All flags are optional.
 |`scp`<br>(remote)|`-r`ecursive|`[SOURCE_USR@]SOURCE_IP`:`REMOTE_SOURCE` `LOCAL_DEST` |Securely copy file `REMOTE_SOURCE` which lives on `SOURCE_IP` to `LOCAL_DEST`|
 ## Downloading .jar files and initizalizing the server on your workstation
 > [!NOTE]
-> This step assumes you have access to any other computer that isn't the Pi. If that isn't the case, follow these instructions on your Pi.
+> This step assumes you have access to any other computer that is more power than the Pi. If that isn't the case, follow these instructions on your Pi.
 > I completed them on my Windows workstation.
 
 ### First run
-Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I ran the latest supported version, which is 1.20.6. Make a folder called `Minecraft_server` and put the .jar in it. Open the Terminal app or just Command Prompt. `cd` into the `Minecraft_server` directory. `touch start.bat` to create a BATCH (Windows scripting) file. Edit the .bat in notepad and put the following code inside it. **Make sure you change the .jar name.**
+Get the [.jar file from Purpur](https://purpurmc.org/docs/purpur/#downloads). I ran the latest supported version, which is 1.20.6. Make a folder called `Minecraft_server` and put the .jar in it. Open the Terminal app or just Command Prompt. `cd` into the `Minecraft_server` directory. `touch start.bat` to create a BATCH (Windows scripting) file. Edit the .bat in notepad and put the following code inside it. **Make sure you change the SERVER_NAME parameter to match that of your .jar file.**
 
 ```
 java -Xms4096M -Xmx4096M -jar SERVER_NAME.jar --nogui

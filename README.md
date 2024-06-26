@@ -36,6 +36,9 @@ Starting this step I assume that you have a Pi and all its parts, including a mi
 Make sure the Pi is powered off. Put the SD card into the Pi, connect it to a monitor, keyboard, and mouse, and power it up! You should be greeted by the splash screen and the setup. Go through the setup, but maybe save customizing everything to your liking till after the next section.
 
 Get the Pi on the Wifi or Ethernet, it'll need to access the internet.
+
+Install Java 21 by following the "Ubuntu/Debian" steps on guide: https://docs.papermc.io/misc/java-install. It's for Paper, but Purpur is a fork of Paper so no trouble there.
+
 ### Disabling the GUI (recommended)
 > [!NOTE]
 > If you're not confident/willing to put in a little brain power to learning command-line editors such as Vim or Nano skip this step!

@@ -1,7 +1,7 @@
 # raspberry-craft
 A guide and starting files for running a Minecraft server on a Raspberry Pi 5 using [Purpur](https://purpurmc.org/docs/purpur/), [`GNU Screen`](https://www.gnu.org/software/screen/)* and some scripts. At the end of this guide, you should have a Raspberry Pi that will launch a GNU Screen session on reboot. That Screen session will display the server output, current RAM/CPU usage and a blank terminal. You will then be able to remotely access the Screen session using SSH from any other computer on the network. 
 
-Throughout this guide, all command line commands will be formatted like `this`. All keystrokes will be formatted like `<this>`. Anything optional will surrounded in [ ], like `[so]`. Anything that should be replaced with your own values will be shown like `<this>`.
+Throughout this guide, all command line commands and filenames will be formatted like `this`. All keystrokes will be formatted like `<this>`. Anything optional will surrounded in [ ], like `[so]`. Placeholder values that should be replaced will be encapsulated like `(this)`.
 
 \* Technically it's just called Screen, but trying to Google for that is one of Dante's Circles.
 ## Required materials
@@ -44,6 +44,8 @@ Running a Graphical User Interface (GUI)--the desktop and visual programs as opp
 
 If you choose to disable the GUI, select "boot into command line", rather than "boot into GUI". This is known as booting "headless". You can always re-enable this if you end up using the Pi for something else by running `sudo raspi-config`.
 ## Command Line crash course
+[Jump to Command Line Quick Reference](#command-line-quick-reference)
+
 You're gonna have to know some things about the command line in order to stay sane. 
 
 If you're setting up a server, you've probably messed around with Minecraft commands, such as `/tp`. When you open the chat and type, you're interacting with the server on a command line, not graphically. In this case, non-graphical means that there's no cursor or windows to navigate. 
@@ -200,8 +202,8 @@ All flags are optional.
 |`mkdir`||`DIRECTORY`|Create directory `destination`|
 |`cat`||`FILE`|Print the **entire** contents of `destination` to the console.<br>Will con`cat`enate the file contents to the standard output, (which is the console).|
 |`less`||`FILE`|Display a paginated version of `destination`'s contents.<br>`<Space>` will jump a page and `<q>` will exit.<br>`<Arrow keys>` will move line by line.|
-|`scp`<br>(local)|`-r`ecursive|`LOCAL_SOURCE` `[DEST_USR@]DEST_IP`:`REMOTE_DEST` |Securely copy file `LOCAL_SOURCE` to `REMOTE_DEST` which lives on `DEST_IP`.<br>`DEST_USR` is optional and will password prompt.|
-|`scp`<br>(remote)|`-r`ecursive|`[SOURCE_USR@]SOURCE_IP`:`REMOTE_SOURCE` `LOCAL_DEST` |Securely copy file `REMOTE_SOURCE` which lives on `SOURCE_IP` to `LOCAL_DEST`|
+|`scp`<br>(loc->rem)|`-r`ecursive|`LOCAL_SOURCE` `[DEST_USR@]DEST_IP`:`REMOTE_DEST` |Securely copy file `LOCAL_SOURCE` to `REMOTE_DEST` which lives on `DEST_IP`.<br>`DEST_USR` is optional and will password prompt.|
+|`scp`<br>(rem->loc)|`-r`ecursive|`[SOURCE_USR@]SOURCE_IP`:`REMOTE_SOURCE` `LOCAL_DEST` |Securely copy file `REMOTE_SOURCE` which lives on `SOURCE_IP` to `LOCAL_DEST`|
 ## Downloading .jar files and initizalizing the server on your workstation
 > [!NOTE]
 > This step assumes you have access to any other computer that is more power than the Pi. If that isn't the case, follow these instructions on your Pi.
@@ -271,9 +273,20 @@ quiz@raspberry-pi:~ $ ip a
     inet6 fe80::78da:7a65:d220:ac4f/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 ```
-Explanation here
+Brief networking explanation: sections 1, 2, and 3 each refer to a different networking device inside of your computer. In my case, 1 is loopback, 2 is Ethernet and 3 is Wireless Local Area Network 0 (Wifi). My Pi wasn't connected to Ethernet, so I suspect that that was an internal hardware connection like loopback is.
 
-On your Windows PC, launch Terminal/Command Prompt. Navigate to the **parent directory** of the `Minecraft_Server` folder that you ran Chunky in. So if the path is `C:/Users/Quiz/Documents/Minecraft_Server`, navigate to `Documents`. The command I would run is `scp -r Minecraft_Server quiz@(PI_IP):~/mc/pre_gen_server`. This would prompt you for the Pi's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `/home/quiz/mc/pre_gen_server` (which `scp` will create if it is not present) on the computer listed with `PI_IP`. It may take a minute or two, depending on connection speed and file size.
+Anyway, we're trying to find our wireless IP so we want to look at section 3:
+```
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 2c:cf:67:1f:19:8f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.113/24 brd 192.168.0.255 scope global noprefixroute wlan0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::78da:7a65:d220:ac4f/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+```
+The line starting with `inet` is what we want. The IP of the Pi is `192.168.0.113`. Write this number down and label it as `PI_IP` so you don't forget.
+
+On your Windows PC, launch Terminal/Command Prompt. Navigate to the **parent directory** of the `Minecraft_Server` folder that you ran Chunky in. So if the path is `C:/Users/Quiz/Documents/Minecraft_Server`, navigate to `Documents`. The command I would run is `scp -r Minecraft_Server quiz@192.168.0.113:~/mc/pre_gen_server`. This would prompt you for the Pi's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `/home/quiz/mc/pre_gen_server` (which `scp` will create if it is not present) on the computer listed with `192.168.0.113`. It may take a minute or two, depending on connection speed and file size.
 
 The general form is `scp -r (local_destination_to_transfer) (pi_username)@(PI_IP):~/path/to/server/directory`
 
@@ -295,13 +308,18 @@ Wireless LAN adapter Wi-Fi:
 ```
 Write down the IPv4 address and label it `WORKSTATION_IP`.
 
-On your Pi, `cd` to the location you want the new directory stored in. For me, that would be `cd ~/mc`. Remember, we're copying a directory, not a file, so we don't need to create the destination directory ourselves. Next, run `scp`. The command I would run is `scp -r Quiz@WORKSTATION_IP:C:\Users\Quiz\Documents\Minecraft_Server .`. This wuold prompt you for the PC's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `.` (current directory) off of the computer listed with `WORKSTATION_IP`. It may take a minute or two, depending on connection speed and file size.
+On your Pi, `cd` to the location you want the new directory stored in. For me, that would be `cd ~/mc`. Remember, we're copying a directory, not a file, so we don't need to create the destination directory ourselves. Next, run `scp`. The command I would run is `scp -r Quiz@10.140.248.114:C:\Users\Quiz\Documents\Minecraft_Server .`. This would prompt you for the PC's password and then `r`ecursively copy the directory `Minecraft_Server` to the directory `.` (current directory) off of the computer listed with `WORKSTATION_IP`. It may take a minute or two, depending on connection speed and file size.
+
+The general form is `scp -r (workstation_username)@(WORKSTATION_IP):(C:\path\to\server\) .` Note that Windows uses `\` and allows spaces in file and directory names whereas Linux uses `/` and does not allow spaces. I would just copy the path and paste it rather than retyping it.
+
+Confirm that the transfer worked by entering the Pi's console and running `ls ~/mc`. You should see the server directory listed there.
 </details>
 
 ## Tuning the server
 What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization)<sup>Later is now!</sup>. I followed that guide exactly except for the DAB settings, which I left untouched.
 ## Port fowarding the router
 ## Optional extras
+The following is some of the fluff that makes the server easier to run. You're perfectly fine just using `start.sh`, but this will make everything smoother (at the cost of a learning curve).
 ### Simple startup script
 ### GNU Screen
 #### What is it and why do we want it?

@@ -254,9 +254,22 @@ My workstation is wired and my Pi is wireless, so I'll explain that setup first.
 To find the IP of your Pi, you'll need to type `ip a` into the console.
 
 ```
-quiz@raspberry-pi:~$ ip a
+quiz@raspberry-pi:~ $ ip a
 
-TBA
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN group default qlen 1000
+    link/ether 2c:cf:67:1f:19:8e brd ff:ff:ff:ff:ff:ff
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 2c:cf:67:1f:19:8f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.113/24 brd 192.168.0.255 scope global noprefixroute wlan0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::78da:7a65:d220:ac4f/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
 ```
 Explanation here
 

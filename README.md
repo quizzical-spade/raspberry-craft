@@ -316,7 +316,35 @@ Confirm that the transfer worked by entering the Pi's console and running `ls ~/
 </details>
 
 ## Tuning the server
-What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization)<sup>Later is now!</sup>. I followed that guide exactly except for the DAB settings, which I left untouched.
+What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization)<sup>Later is now!</sup>. I'm gonna explain a little bit about how the guide is formatted, then send you off to go do it. 
+
+```
+Intro
+Prep
+Config
+   Networking
+      server.properties
+      purpur.yml
+   Chunks
+       server.properties
+       spigot.yml
+       paper-world-configuration
+       pufferfish.yml
+   Mobs
+       bukkit.yml
+       spigot.yml
+       paper-world-configuration
+       pufferfish.yml
+       purpur.yml
+   Misc
+       spigot.yml
+       paper-world-configuration
+       pufferfish.yml
+       purpur.yml
+```
+Running a Purpur server means we don't get a pufferfish.yml so you should ignore those sections. I have followed the guide and provided the files in the directory `no_trouble_purpur_1.20.6`.
+
+I followed that guide exactly except for the DAB settings, which I left untouched.
 ## Port fowarding the router
 ## Optional extras
 The following is some of the fluff that makes the server easier to run. You're perfectly fine just using `start.sh`, but this will make everything smoother (at the cost of a learning curve).

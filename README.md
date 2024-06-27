@@ -256,6 +256,7 @@ Due to this fact, it's far easier to `scp` from a wired connection to a wireless
 My workstation is wired and my Pi is wireless, so I'll explain that setup first.
 #### Wired workstation -> Wireless Pi
 <details>
+ 
 To find the IP of your Pi, you'll need to type `ip a` into the console.
 
 ```
@@ -298,6 +299,7 @@ Confirm that the transfer worked by entering the Pi's console and running `ls ~/
 
 #### Wired Pi <- Wireless workstation
 <details>
+ 
 On your Windows PC, launch Terminal/Command Prompt. Type in `ipconfig` and you should get a long output that contains a section like this:
 
 ```
@@ -321,6 +323,13 @@ Confirm that the transfer worked by entering the Pi's console and running `ls ~/
 ## Tuning the server
 What makes a server perform better is a mystical and arcane formula, known only to Microsoft and [this guy, who wrote a full optimization guide!](https://github.com/YouHaveTrouble/minecraft-optimization)<sup>Later is now!</sup>. I'm gonna explain a little bit about how the guide is formatted, then send you off to go do it. 
 
+You should read the Intro but skip the Prep. We're using Purpur, so no need to pick another `.jar`.
+
+The Config section is broken into 4 categories. Each category is further sorted by which file you edit. Make sure you're searching for the right changes in the right file! Running a Purpur server means we don't get a `pufferfish.yml` so you should ignore those sections.
+
+
+<details>
+ <summary>Guide index:</summary>
 ```
 Intro
 Prep
@@ -345,12 +354,27 @@ Config
        pufferfish.yml
        purpur.yml
 ```
-Running a Purpur server means we don't get a pufferfish.yml so you should ignore those sections. I have followed the guide and provided the files in the directory `no_trouble_purpur_1.20.6`.
 
-I followed that guide exactly except for the DAB settings, which I left untouched.
+ </details>
+
+This is an excellent time to practice Vim. Remember to open a file in Vim:
+ 
+```
+vim (filename)
+```
+
+To search in Vim: `<Ctrl+C>(string_to_search)<Enter>` and then `<n>` will jump forward to the next occurrence and `<Shift+n>` will jump back.
+
+I have followed the guide and provided the files in the directory `no_trouble_purpur_1.20.6`.
+### My own tuning
+
+I found that the optimized settings are, potentially, a little too optimized. I was getting perfect performance on the Pi with it, but the experience was lacking. Night had too few mobs and the view distance was way too close. So, I de-optimized them a little. I'm going to list the settings that I changed (and why). If you just want to try out my settings, I've included them in `quizs_config_files`.
+
 ## Port fowarding the router
 ## Optional extras
+
 The following is some of the fluff that makes the server easier to run. You're perfectly fine just using `start.sh`, but this will make everything smoother (at the cost of a learning curve).
+
 ### Simple startup script
 ### GNU Screen
 #### What is it and why do we want it?

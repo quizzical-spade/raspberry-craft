@@ -363,7 +363,7 @@ This is an excellent time to practice Vim. Remember to open a file in Vim:
 vim (filename)
 ```
 
-To search in Vim: `<Ctrl+C>(string_to_search)<Enter>` and then `<n>` will jump forward to the next occurrence and `<Shift+n>` will jump back.
+To search in Vim: `<Ctrl+C>(:/string_to_search)<Enter>` and then `<n>` will jump forward to the next occurrence and `<Shift+n>` will jump back.
 
 I have followed the guide and provided the files in the directory `no_trouble_purpur_1.20.6`.
 ### My own tuning

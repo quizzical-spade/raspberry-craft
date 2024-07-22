@@ -29,7 +29,7 @@ Linux fits in a weird spot in the OS spectrum. On one hand you have Apple's macO
 
 Linux, however, says screw all that. You have absolute and complete control over everything you want to control. That does mean that you can just kinda...break it, but that's worth it; anything you could break you have to do pretty intentionally. The downside is that to get that level of control, you have to learn not just the [command line](#command-line-crash-course) but also how operating systems and processes work in general. It's worth it, I promise. You're learning not only a new skill but a whole swath of new terms and ways of thinking about things. It will come, and this is a very, very verbose guide, so you should have a good basis.
 
-For this project, we're use Linux because it's free and pretty light in terms of space and performance; it can run on less powerful hardware, which makes it perfect for Raspberry Pis (and older computers).
+For this project, we're using Linux because it's free and pretty light in terms of space and performance; it can run on less powerful hardware, which makes it perfect for Raspberry Pis (and older computers).
 ## Configuring the Pi
 Starting this step I assume that you have a Pi and all its parts, including a microSD running Raspbian (Raspberry Pi OS). 
 

@@ -330,7 +330,9 @@ The Config section is broken into 4 categories. Each category is further sorted 
 
 <details>
  <summary>Guide index:</summary>
+ 
 ```
+
 Intro
 Prep
 Config
@@ -353,6 +355,7 @@ Config
        paper-world-configuration
        pufferfish.yml
        purpur.yml
+
 ```
 
  </details>
